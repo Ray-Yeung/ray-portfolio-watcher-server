@@ -6,7 +6,7 @@ const morgan = require('morgan');
 const passport = require('passport');
 
 const { router: authRouter, localStrategy, jwtStrategy } = require('./auth');
-
+const { router: stockRouter } = require('./routes/stockRouter');
 
 const { PORT, CLIENT_ORIGIN } = require('./config');
 const { dbConnect } = require('./db-mongoose');
@@ -29,6 +29,8 @@ app.use(
 passport.use(localStrategy);
 passport.use(jwtStrategy);
 
+app.use('/api/auth/', authRouter);
+app.use('/api/routes/', stockRouter);
 
 function runServer(port = PORT) {
   const server = app

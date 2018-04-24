@@ -3,8 +3,12 @@
 const mongoose = require('mongoose');
 
 const stockSchema = new mongoose.Schema({
-    company: {type: String },
-    currentStockPrice: { type: Number }
+    symbol: { type: String },
+    companyName: { type: String },
+    primaryExchange: { type: String },
+    sector: { type: String },
+    open: { type: Number },
+    latestPrice: { type: Number }
 });
 
 const Stock = mongoose.model('Stock', stockSchema);
