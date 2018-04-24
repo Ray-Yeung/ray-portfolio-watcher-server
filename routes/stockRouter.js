@@ -10,7 +10,7 @@ const Stock = require('../models/portfolio');
 router.get('/:userId', (req, res) => {
   User.findById(req.params.userId)
     .then(user => {
-      res.json(user.portfolio)
+      res.json(user.stocks)
     })
 });
 
