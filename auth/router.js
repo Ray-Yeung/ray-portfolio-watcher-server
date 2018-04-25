@@ -20,14 +20,14 @@ const localAuth = passport.authenticate('local', {session: false});
 router.use(bodyParser.json());
 // The user provides a username and password to login
 router.post('/login', localAuth, (req, res) => {
-  const authToken = createAuthToken(req.user.serialize());
+  const authToken = createAuthToken(req.user);
   res.json({authToken});
 });
 
 // POST to register a new user
 router.post('/register', (req, res) => {
   let { username, password } = req.body;
-
+  console.log(req.body);
   return User.find({username})
     .count()
     .then(count => {
@@ -50,7 +50,7 @@ router.post('/register', (req, res) => {
       });
     })
     .then(user => {
-      return res.status(201).json(user.serialize());
+      return res.status(201).json(user);
     })
     .catch(err => {
       // Forward validation errors on to the client, otherwise give a 500
@@ -58,6 +58,7 @@ router.post('/register', (req, res) => {
       if(err.reason === 'ValidationError') {
         return res.status(err.code).json(err);
       }
+      console.log(err);
       res.status(500).json({code: 500, message: 'Internal server error'});
     });
 });

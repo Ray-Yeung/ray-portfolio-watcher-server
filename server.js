@@ -7,6 +7,7 @@ const passport = require('passport');
 
 const { router: authRouter, localStrategy, jwtStrategy } = require('./auth');
 const { router: stockRouter } = require('./routes/stockRouter');
+// const { router: userRouter } = require('./routes/userRouter');
 
 const { PORT, CLIENT_ORIGIN } = require('./config');
 const { dbConnect } = require('./db-mongoose');
@@ -29,8 +30,9 @@ app.use(
 passport.use(localStrategy);
 passport.use(jwtStrategy);
 
-app.use('/api/auth/', authRouter);
+app.use('/auth', authRouter);
 app.use('/api/routes/', stockRouter);
+// app.use('/api/users', userRouter);
 
 function runServer(port = PORT) {
   const server = app
