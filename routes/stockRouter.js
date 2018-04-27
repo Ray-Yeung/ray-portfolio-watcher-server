@@ -1,31 +1,33 @@
 'use strict';
-
 const express = require('express');
 const mongoose = require('mongoose');
 const router = express.Router();
 const passport = require('passport');
 const bodyParser = require('body-parser');
-const config = require('../config');
 
 const jwt = require('jsonwebtoken');
-const jwtAuth = passport.authenticate('jwt', {session: false});
+const jwtAuth = passport.authenticate('jwt', {sesson: false});
 
-const { User } = require ('../models/user');
+const {Stock} = require('../models/stock');
 
 router.use(jwtAuth);
 router.use(bodyParser.json());
 
-// GET user portfolio
-router.get('/:userId', (req, res) => {
-  User.findById(req.params.userId)
-    .then(user => {
-      res.json(user.stocks)
+// GET user stocks
+router.get('/stocks', (req, res, next) => {
+  const userId = req.user.id;
+  Stock.find({userId})
+    .srot('name')
+    .then(results => {
+      res.json(results);
     })
+    .catch(err => {
+      next(err);
+    });
 });
 
-
-// Create new user
-router.post('/:userId', (req, res) => {
+// POST/create new stock
+router.post('/stocks', (req, res, next) => {
   const stock = {
     symbol: req.body.symbol,
     companyName: req.body.companyName,
@@ -35,32 +37,30 @@ router.post('/:userId', (req, res) => {
     latestPrice: req.body.latestPrice
   }
 
-  User.findById(req.params.userId)
-    .then(user => {
-      user.stocks.push(stock)
-      
-      user.save(err => {
-        if(err) {
-          res.send(err);
-        }
-        res.json(user);
-      })
+  const userId = req.user.id;
+  const newStock = { stock, userId };
+  
+  Stock.create(newStock)
+    .then(result => {
+      res.location(`${re.originalUrl}/{${result.id}`).status(201).json(result);
     })
+    .catch(err => {
+      next(err);
+    });
 });
 
-// Delete user
-router.delete('/:userId', (req, res) => {
-  User.findById(req.params.userId)
-    .then(user => {
-      user.stocks.id(req.body.stockId).remove()
+// DELETE a stock
+router.delete('/stocks/:id', (req, res, next) => {
+  const { id } = req.params;
+  const userId = req.user.id;
 
-      user.save(err => {
-        if(err) {
-          res.send(err);
-        }
-        res.json(user.stocks)
-      })
+  Stock.findOneAndRemove({ _id: id, userId })
+    .then(() => {
+      res.status(204).end();
     })
+    .catch(err => {
+      next(err);
+    });
 });
 
 module.exports = {router};

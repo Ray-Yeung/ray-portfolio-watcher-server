@@ -4,40 +4,61 @@ const mongoose = require('mongoose');
 const router = express.Router();
 const passport = require('passport');
 const bodyParser = require('body-parser');
-const config = require('../config');
-const { User } = require('../models/user');
 
-// const jwt = require('jsonwebtoken')
-// const jwtAuth = passport.authenticate('jwt', {session: false});
+const jwt = require('jsonwebtoken');
+const jwtAuth = passport.authenticate('jwt', {session: false});
 
-// router.use(jwtAuth);
+const { User } = require ('../models/user');
+
+router.use(jwtAuth);
 router.use(bodyParser.json());
 
-router.post('/register', (req, res) => {
-  let {username, password} = req.body;
-  console.log(req.body);
-//   return User.hashPassword(password)
-//     .then(digest => {
-//       const newUser = {
-//         username,
-//         password: digest
-//       };
-//       return User.create(newUser);
-//     })
-//     .then(result => {
-//       return res.status(201).location(`/api/users/${result.id}`).json(result);
-//     })
-//     .catch(err => {
-//       if(err.code === 11000) {
-//         return res.status(400).json({
-//           code: 400, 
-//           reason: 'ValidationError',
-//           message: 'The username already exists',
-//           location: "username'"
-//         });
-//       }
-//       next(err);
-//     });
+// GET user portfolio
+router.get('/:userId', (req, res) => {
+  User.findById(req.params.userId)
+    .then(user => {
+      res.json(user.stocks)
+    })
+});
+
+
+// Create new user
+router.post('/:userId', (req, res) => {
+  const stock = {
+    symbol: req.body.symbol,
+    companyName: req.body.companyName,
+    primaryExchange: req.body.primaryExchange,
+    sector: req.body.sector,
+    open: req.body.open,
+    latestPrice: req.body.latestPrice
+  }
+
+  User.findById(req.params.userId)
+    .then(user => {
+      user.stocks.push(stock)
+      
+      user.save(err => {
+        if(err) {
+          res.send(err);
+        }
+        res.json(user);
+      })
+    })
+});
+
+// Delete user
+router.delete('/:userId', (req, res) => {
+  User.findById(req.params.userId)
+    .then(user => {
+      user.stocks.id(req.body.stockId).remove()
+
+      user.save(err => {
+        if(err) {
+          res.send(err);
+        }
+        res.json(user.stocks)
+      })
+    })
 });
 
 module.exports = {router};
