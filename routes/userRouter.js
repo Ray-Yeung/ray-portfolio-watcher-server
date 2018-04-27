@@ -5,14 +5,20 @@ const router = express.Router();
 const passport = require('passport');
 const bodyParser = require('body-parser');
 
-const jwt = require('jsonwebtoken');
-const jwtAuth = passport.authenticate('jwt', {session: false});
+// const jwt = require('jsonwebtoken');
+// const jwtAuth = passport.authenticate('jwt', {session: false});
 
 const { User } = require ('../models/user');
 
-router.use(jwtAuth);
+// router.use(jwtAuth);
 router.use(bodyParser.json());
 
+router.get('/', (req,res) => {
+  User.find()
+    .then(users => {
+      res.json(users)
+    })
+})
 // GET user portfolio
 router.get('/:userId', (req, res) => {
   User.findById(req.params.userId)
@@ -32,6 +38,7 @@ router.post('/:userId', (req, res) => {
     open: req.body.open,
     latestPrice: req.body.latestPrice
   }
+  console.log(stock);
 
   User.findById(req.params.userId)
     .then(user => {

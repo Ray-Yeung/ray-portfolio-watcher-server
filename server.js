@@ -34,7 +34,7 @@ passport.use(jwtStrategy);
 
 app.use('/auth', authRouter);
 app.use('/api/stock', userRouter);
-app.use('/api', stockRouter);
+// app.use('/api', stockRouter);
 // app.use('/api', userRouter2);
 // app.use('/api/users', userRouter);
 
