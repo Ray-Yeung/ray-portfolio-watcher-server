@@ -31,6 +31,8 @@ passport.use(localStrategy);
 passport.use(jwtStrategy);
 
 app.use('/auth', authRouter);
+
+app.use(passport.authenticate('jwt', {session: false, failWithError: true}));
 app.use('/api/stock', userStockRouter);
 // app.use('/api', stockRouter);
 
