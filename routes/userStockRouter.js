@@ -64,46 +64,28 @@ router.delete('/:userId/:id', (req, res, next) => {
   // console.log(userId);
   // console.log(req.body);
 
-  User.update(
-    {'_id': req.user.id}, 
-    { $pull: { "stocks" : { _id: req.params.id } } }
-  )
-  .then(function(result) {
-    console.log(result);
-    res.json({})
-  })
-  .catch(err => {
-    next(err);
-  })
-
-  
-
-//   User.findById(req.user.id, function(err, user) {
-//     if(err) return console.error('Error', err);
-//     user.stocks = user.stocks.filter(stk => stk._id !== req.params.id);
-//     user.save();
-//     user.stocks.findByIdAndRemove(req.params.id)
-//     .then(res => console.log(res))
-//     .catch(err => console.log(err))
-//     res.status(204).end();
-// })
-  
-  // User.findById(userId)
-  //   .then(user => {
-  //     user.findOneAndRemove({id})
-  //     .then(() => {
-  //       res.status(204).end();
-  //     })
-
-  //   })
+  User.findById(userId) 
+    .then(user => {
+      user.stocks.id(id).remove()
+      user.save((err, user) => {
+        if(err) {
+          res.send(err);
+        } 
+        res.json(user)
+      });
+    })
     
-  // User.findOneAndRemove({ _id: id, userId: userId })
-  //   .then(() => {
-  //     res.status(204).end();
-  //   })
-  //   .catch(err => {
-  //     next(err);
-  //   })
+  // User.update(
+  //   {'_id': req.user.id}, 
+  //   { $pull: { "stocks" : { _id: req.params.id } } }
+  // )
+  // .then(function(result) {
+  //   console.log(result);
+  //   res.json({})
+  // })
+  // .catch(err => {
+  //   next(err);
+  // })
 });
 
 module.exports = {router};
