@@ -27,6 +27,14 @@ router.get('/:userId', (req, res, next) => {
     })
 });
 
+// Get user stock logo
+router.get('/:userId/logo', (req, res, next) => {
+  User.findById(req.params.userId)
+    .then(user => {
+      res.json(user.stocks.logo)
+    })
+});
+
 
 // Create user's new stock
 router.post('/:userId', (req, res, next) => {
@@ -38,7 +46,8 @@ router.post('/:userId', (req, res, next) => {
     primaryExchange: req.body.primaryExchange,
     sector: req.body.sector,
     open: req.body.open,
-    latestPrice: req.body.latestPrice
+    latestPrice: req.body.latestPrice,
+    logo: req.body.logo
   }
   console.log(req.params.userId);
 
@@ -50,7 +59,7 @@ router.post('/:userId', (req, res, next) => {
         if(err) {
           res.send(err)
         }
-        res.json(user)
+        res.json(user.stocks[user.stocks.length - 1])
       })
     })
 });
@@ -59,10 +68,6 @@ router.post('/:userId', (req, res, next) => {
 router.delete('/:userId/:id', (req, res, next) => {
   const {id} = req.params;
   const userId = req.user.id;
-  // console.log(req.params);
-  // console.log(id);
-  // console.log(userId);
-  // console.log(req.body);
 
   User.findById(userId) 
     .then(user => {

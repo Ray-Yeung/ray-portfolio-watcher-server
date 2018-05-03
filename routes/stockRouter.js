@@ -34,7 +34,8 @@ router.post('/stocks', (req, res, next) => {
     primaryExchange: req.body.primaryExchange,
     sector: req.body.sector,
     open: req.body.open,
-    latestPrice: req.body.latestPrice
+    latestPrice: req.body.latestPrice,
+    logo: req.body.logo
   }
 
   const userId = req.user.id;
