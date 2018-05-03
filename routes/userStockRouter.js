@@ -38,8 +38,6 @@ router.get('/:userId/logo', (req, res, next) => {
 
 // Create user's new stock
 router.post('/:userId', (req, res, next) => {
-  console.log(req.body.symbol);
-  console.log(req.body.companyName);
   const newStock = {
     symbol: req.body.symbol,
     companyName: req.body.companyName,
@@ -47,9 +45,12 @@ router.post('/:userId', (req, res, next) => {
     sector: req.body.sector,
     open: req.body.open,
     latestPrice: req.body.latestPrice,
-    logo: req.body.logo
+    week52High: req.body.week52High,
+    week52Low: req.body.week52Low,
+    peRatio: req.body.peRatio,
+    logo: req.body.logo 
   }
-  console.log(req.params.userId);
+  // console.log(req.params.userId);
 
   User.findById(req.params.userId)
     .then(user => {
