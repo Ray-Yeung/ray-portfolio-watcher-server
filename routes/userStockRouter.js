@@ -35,7 +35,6 @@ router.get('/:userId/logo', (req, res, next) => {
     })
 });
 
-
 // Create user's new stock
 router.post('/:userId', (req, res, next) => {
   const newStock = {
@@ -50,7 +49,6 @@ router.post('/:userId', (req, res, next) => {
     peRatio: req.body.peRatio,
     logo: req.body.logo 
   }
-  // console.log(req.params.userId);
 
   User.findById(req.params.userId)
     .then(user => {
@@ -80,18 +78,6 @@ router.delete('/:userId/:id', (req, res, next) => {
         res.json(user)
       });
     })
-    
-  // User.update(
-  //   {'_id': req.user.id}, 
-  //   { $pull: { "stocks" : { _id: req.params.id } } }
-  // )
-  // .then(function(result) {
-  //   console.log(result);
-  //   res.json({})
-  // })
-  // .catch(err => {
-  //   next(err);
-  // })
 });
 
 module.exports = {router};
