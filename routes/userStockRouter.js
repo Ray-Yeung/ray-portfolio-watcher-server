@@ -46,7 +46,7 @@ router.post('/:userId', (req, res, next) => {
     latestPrice: req.body.latestPrice,
     week52High: req.body.week52High,
     week52Low: req.body.week52Low,
-    peRatio: req.body.peRatio,
+    // peRatio: req.body.peRatio,
     logo: req.body.logo 
   }
 

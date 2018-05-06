@@ -10,7 +10,7 @@ const stockSchema = new mongoose.Schema({
     latestPrice: { type: Number },
     week52High: { type: Number },
     week52Low: { type: Number },
-    peRatio: { type: Number },
+    // peRatio: { type: Number },
     logo: { type: String }
     // userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true }
 });
